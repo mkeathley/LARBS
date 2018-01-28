@@ -16,53 +16,11 @@ dialog --defaultno --title "DON'T BE A BRAINLET!" --yesno "Do you think I'm memi
 
 dialog --no-cancel --inputbox "Enter a name for your computer." 10 60 2> comp
 
-dialog --no-cancel --inputbox "Enter partitionsize in gb, separated by space (swap & root)." 10 60 2>psize
-
-IFS=' ' read -ra SIZE <<< $(cat psize)
-
-re='^[0-9]+$'
-if ! [ ${#SIZE[@]} -eq 2 ] || ! [[ ${SIZE[0]} =~ $re ]] || ! [[ ${SIZE[1]} =~ $re ]] ; then
-    SIZE=(12 25);
-fi
-
 timedatectl set-ntp true
 
-cat <<EOF | fdisk /dev/sda
-o
-n
-p
-
-
-+200M
-n
-p
-
-
-+${SIZE[0]}G
-n
-p
-
-
-+${SIZE[1]}G
-n
-p
-
-
-w
-EOF
-partprobe
-
-mkfs.ext4 /dev/sda4
-mkfs.ext4 /dev/sda3
-mkfs.ext4 /dev/sda1
-mkswap /dev/sda2
-swapon /dev/sda2
-mount /dev/sda3 /mnt
-mkdir /mnt/boot
-mount /dev/sda1 /mnt/boot
-mkdir /mnt/home
-mount /dev/sda4 /mnt/home
-
+cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
+sed -i 's/^#Server/Server/' /etc/pacman.d/mirrorlist.backup
+rankmirrors -n 6 /etc/pacman.d/mirrorlist.backup > /etc/pacman.d/mirrorlist
 
 pacstrap /mnt base base-devel
 

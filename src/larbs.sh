@@ -172,15 +172,6 @@ pacman --noconfirm --needed -Sy \
 	mpv || (red Error installing audio packages. Check your internet connection and pacman keyring.)
 
 
-blue \[6\/6\] Now installing main programs \(devel\)...
-pacman --noconfirm --needed -Sy \
-	python-dbus \
-	python-gobject \
-	discount \
-	r \
-	highlight || (red Error installing devel packages. Check your internet connection and pacman keyring.)
-
-
 pacman --noconfirm --needed -S fzf || (red Error with peripheral programs.)
 
 cat << "EOF"

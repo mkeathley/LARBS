@@ -2,7 +2,7 @@
 
 passwd
 
-ln -sf /usr/share/zoneinfo/America/New_York /etc/localtime
+ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime
 
 hwclock --systohc
 
@@ -14,7 +14,7 @@ pacman --noconfirm --needed -S networkmanager
 systemctl enable NetworkManager
 systemctl start NetworkManager
 
-pacman --noconfirm --needed -S grub && grub-install --target=i386-pc /dev/sda && grub-mkconfig -o /boot/grub/grub.cfg
+bootctl --path=/boot install
 
 pacman --noconfirm --needed -S dialog
 larbs() { curl -LO http://larbs.xyz/larbs.sh && bash larbs.sh ;}
